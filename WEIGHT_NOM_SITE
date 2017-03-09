@@ -1,0 +1,22 @@
+#############################################
+create table  db_lshi.WEIGHT_NOM_SITE as
+	select test.ID_SKU, test.ID_STORE, test.DTS_PERIOD, test.DTE_PERIOD, test.ID_OFFER, 
+			test.OUT_OF_STOCK_RATE, test.TURNOVER_LVL4, test.TURNOVER_LVL5,	test.TURNOVER_LVL6, test.TURNOVER_LVL7,
+			test.TURNOVER_LVL4/somme.TURNOVER_LVL4_all, test.TURNOVER_LVL5/somme.TURNOVER_LVL5_all, test.TURNOVER_LVL6/somme.TURNOVER_LVL6_all, 
+			test.TURNOVER_LVL7/somme.TURNOVER_LVL7_all,	
+from (select sum(TURNOVER_LVL4) as TURNOVER_LVL4_all, sum(TURNOVER_LVL5) as TURNOVER_LVL5_all,
+sum(TURNOVER_LVL6) as TURNOVER_LVL6_all, sum(TURNOVER_LVL7) as TURNOVER_LVL7_all,
+ID_STORE 
+from db_lshi.testukr group by ID_STORE) somme, db_lshi.testukr test
+where test.ID_STORE=somme.ID_STORE
+;
+
+create table db_lshi.WEIGHT_NOM_SITE1 as
+select *,
+case 
+	when TURNOVER_LVL4 is not null then 4
+	when TURNOVER_LVL5 is not null then 5 
+        when TURNOVER_LVL6 is not null then 6 
+       when TURNOVER_LVL7 is not null then 7 
+end as PERCENTILE_LVL_DEFINED
+from db_lshi.WEIGHT_NOM_SITE;
