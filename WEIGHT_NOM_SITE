@@ -20,3 +20,7 @@ case
        when TURNOVER_LVL7 is not null then 7 
 end as PERCENTILE_LVL_DEFINED
 from db_lshi.WEIGHT_NOM_SITE;
+
+
+#########################################################
+ALTER TABLE OUT_OF_STOCK_RATE ADD COLUMNS (LOSS_SALES int)
