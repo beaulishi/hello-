@@ -1,0 +1,162 @@
+CREATE TABLE db_lshi.test2(ID_STORE STRING,
+ID_SKU STRING,
+ID_NOMENCL_LVL4 INT,
+ID_NOMENCL_LVL5 INT,
+ID_NOMENCL_LVL6 INT,
+ID_NOMENCL_LVL7 INT,
+LU_NOMENCL_LVL4 STRING,
+LU_NOMENCL_LVL5 STRING,
+LU_NOMENCL_LVL6 STRING,
+LU_NOMENCL_LVL7 STRING,
+DTS_PERIOD STRING,
+DTE_PERIOD STRING,
+Flag_active_offer INT,
+Flag_new_sku INT,
+PRC_PAID_W_TAX INT,
+PRC_SKU_OFFER INT,
+DAY_OF_WEEK INT,
+QTY_SKU_DAY_WEEK INT,
+Flag_non_working_day INT,
+DT_calculation STRING
+)
+row format delimited fields terminated by "\073"
+tblproperties ("skip.header.line.count"="1");
+
+LOAD DATA INPATH '/user/lshi/TEST2.csv' OVERWRITE INTO TABLE db_lshi.test2;
+
+
+##################################
+TRUNOVER_ALL(chiffre a faire pour tout de produit):
+
+select sum(QTY_SKU_DAY_WEEK*PRC_PAID_W_TAX) as TRUNOVER_ALL
+from test2
+group by id_sku;
+
+TRUNOVER_ALL_WEEK(chiffre a faire pour tout de produit par week):
+
+select sum(QTY_SKU_DAY_WEEK*PRC_PAID_W_TAX) as TRUNOVER_ALL_WEEK
+from test2
+group by ID_SKU, DAY_OF_WEEK;
+
+TURNOVER_LVL4:
+
+select sum(QTY_SKU_DAY_WEEK*PRC_PAID_W_TAX) as TURNOVER_LVL4
+from test2 where ID_NOMENCL_LVL4=4
+group by ID_SKU;
+
+TURNOVER_LVL5:
+
+select sum(QTY_SKU_DAY_WEEK*PRC_PAID_W_TAX) as TURNOVER_LVL5
+from test2 where ID_NOMENCL_LVL5=5
+group by ID_SKU;
+
+TURNOVER_LVL6:
+
+select sum(QTY_SKU_DAY_WEEK*PRC_PAID_W_TAX) as TURNOVER_LVL6
+from test2 where ID_NOMENCL_LVL6=6
+group by ID_SKU;
+
+TURNOVER_LVL7:
+
+select sum(QTY_SKU_DAY_WEEK*PRC_PAID_W_TAX) as TURNOVER_LVL7
+from test2
+where ID_NOMENCL_LVL7=7
+group by ID_SKU;
+
+##############################################
+
+create table WEIGHT_DAY_NAT_M as
+select distinct e.ID_STORE, e.ID_SKU, e.Flag_active_offer, e.Flag_new_sku, e.Flag_non_working_day,
+s.TRUNOVER_ALL_F0, f.TRUNOVER_ALL_WEEK_F0,k.TRUNOVER_ALL_F1, l.TRUNOVER_ALL_WEEK_F1, g.TURNOVER_LVL4, h.TURNOVER_LVL5, i.TURNOVER_LVL6, j.TURNOVER_LVL7
+from  db_lshi.test2 e
+right join(
+            select ID_SKU,sum(QTY_SKU_DAY_WEEK*PRC_PAID_W_TAX) as TRUNOVER_ALL_F0
+            from test2
+            where Flag_active_offer=0
+            group by ID_SKU
+            ) s
+on e.ID_SKU=s.ID_SKU
+right join(
+            select ID_SKU, sum(QTY_SKU_DAY_WEEK*PRC_PAID_W_TAX) as TRUNOVER_ALL_WEEK_F0
+            from test2
+            where Flag_active_offer=0
+            group by ID_SKU, DAY_OF_WEEK
+            ) f
+on e.ID_SKU=f.ID_SKU
+right join(
+            select ID_SKU,sum(QTY_SKU_DAY_WEEK*PRC_PAID_W_TAX) as TRUNOVER_ALL_F1
+            from test2
+            where Flag_active_offer=1
+            group by ID_SKU
+            ) k
+on e.ID_SKU=s.ID_SKU
+right join(
+            select ID_SKU, sum(QTY_SKU_DAY_WEEK*PRC_PAID_W_TAX) as TRUNOVER_ALL_WEEK_F1
+            from test2
+            where Flag_active_offer=1
+            group by ID_SKU, DAY_OF_WEEK
+            ) l
+on e.ID_SKU=f.ID_SKU
+
+right join(
+            select ID_SKU, sum(QTY_SKU_DAY_WEEK*PRC_PAID_W_TAX) as TURNOVER_LVL4
+            from test2
+            where ID_NOMENCL_LVL4=4
+            group by ID_SKU
+            ) g
+on e.ID_SKU=g.ID_SKU
+right join(
+            select ID_SKU, sum(QTY_SKU_DAY_WEEK*PRC_PAID_W_TAX) as TURNOVER_LVL5
+            from test2
+            where ID_NOMENCL_LVL5=5
+            group by ID_SKU
+            ) h
+on e.ID_SKU=h.ID_SKU
+right join(
+            select ID_SKU, sum(QTY_SKU_DAY_WEEK*PRC_PAID_W_TAX) as TURNOVER_LVL6
+            from test2
+            where ID_NOMENCL_LVL6=6
+            group by ID_SKU
+            ) i
+on e.ID_SKU=i.ID_SKU
+right join(
+            select ID_SKU, sum(QTY_SKU_DAY_WEEK*PRC_PAID_W_TAX) as TURNOVER_LVL7
+            from test2
+            where ID_NOMENCL_LVL7=7
+            group by ID_SKU
+            ) j
+on e.ID_SKU=j.ID_SKU
+;
+####################################################
+
+create table WEIGHT_DAY_NAT as
+select *,
+    case when Flag_active_offer=1 then TRUNOVER_ALL_WEEK_F1/TRUNOVER_ALL_F1
+    else 0 end as Weight_DoW_Offer_SKU,
+    case when Flag_active_offer=0 then TRUNOVER_ALL_WEEK_F0/TRUNOVER_ALL_F0
+    else 0 end as Weight_DoW_Back_Shelf_SKU,
+    case when Flag_active_offer=1 and Flag_new_sku=1 then TURNOVER_LVL4/TRUNOVER_ALL
+    else 0 end as Weight_DoW_Offer_LVL4_Mm12,
+    case when Flag_active_offer=1 and Flag_new_sku=1 then TURNOVER_LVL5/TRUNOVER_ALL
+    else 0 end as Weight_DoW_Offer_LVL5_Mm12,
+    case when Flag_active_offer=1 and Flag_new_sku=1 then TURNOVER_LVL6/TRUNOVER_ALL
+    else 0 end as Weight_DoW_Offer_LVL6_Mm12,
+    case when Flag_active_offer=1 and Flag_new_sku=1 then TURNOVER_LVL7/TRUNOVER_ALL
+    else 0 end as Weight_DoW_Offer_LVL7_Mm12
+    from WEIGHT_DAY_NAT_M
+            ;
+
+
+
+##########################################################
+create table WEIGHT_SITE_NAT
+select a.ID_SKU,a.DT_DAY,b.Wright_LVL4_Define,b.Wright_LVL5_Define,b.Wright_LVL6_Define,b.Wright_LVL7_Define
+from (
+        select sum(Weight_DoW_Offer_LVL4_Mm12) as Wright_LVL4_Define, sum(Weight_DoW_Offer_LVL5_Mm12) as Wright_LVL5_Define,
+                    sum(Weight_DoW_Offer_LVL6_Mm12) as Wright_LVL6_Define,sum(Weight_DoW_Offer_LVL7_Mm12) as Wright_LVL7_Define
+                    from WEIGHT_DAY_NAT group by ID_SKU) b,
+      I_FORECAST_SITE a
+;
+
+
+
