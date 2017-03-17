@@ -7,23 +7,17 @@ create table  db_lshi.WEIGHT_NOM_SITE as
 			a.TURNOVER_LVL4/b.TURNOVER_LVL4_all PERC_TURNOVER_LVL4_Mm12,  
 			a.TURNOVER_LVL5/b.TURNOVER_LVL5_all PERC_TURNOVER_LVL5_Mm12, 
 			a.TURNOVER_LVL6/b.TURNOVER_LVL6_all PERC_TURNOVER_LVL6_Mm12, 
-			a.TURNOVER_LVL7/b.TURNOVER_LVL7_all PERC_TURNOVER_LVL7_Mm12	
+			a.TURNOVER_LVL7/b.TURNOVER_LVL7_all PERC_TURNOVER_LVL7_Mm12,	
+case 
+	when a.TURNOVER_LVL4 is not null then 4
+	when a.TURNOVER_LVL5 is not null then 5 
+    when a.TURNOVER_LVL6 is not null then 6 
+    when a.TURNOVER_LVL7 is not null then 7 
+end as PERCENTILE_LVL_DEFINED
+
 from (select sum(TURNOVER_LVL4) as TURNOVER_LVL4_all, sum(TURNOVER_LVL5) as TURNOVER_LVL5_all,
 sum(TURNOVER_LVL6) as TURNOVER_LVL6_all, sum(TURNOVER_LVL7) as TURNOVER_LVL7_all,
 ID_STORE 
 from db_lshi.testukr group by ID_STORE) b, db_lshi.testukr a
 where a.ID_STORE=b.ID_STORE
 ;
-
-create table db_lshi.WEIGHT_NOM_SITE1 as
-select *,
-case 
-	when TURNOVER_LVL4 is not null then 4
-	when TURNOVER_LVL5 is not null then 5 
-        when TURNOVER_LVL6 is not null then 6 
-       when TURNOVER_LVL7 is not null then 7 
-end as PERCENTILE_LVL_DEFINED
-from db_lshi.WEIGHT_NOM_SITE;
-
-
-
