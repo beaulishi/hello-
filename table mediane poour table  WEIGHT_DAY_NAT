@@ -14,89 +14,88 @@ s.TRUNOVER_ALL_F0, f.TRUNOVER_ALL_WEEK_F0,k.TRUNOVER_ALL_F1, l.TRUNOVER_ALL_WEEK
 g1.TURNOVER_LVL4_week, h1.TURNOVER_LVL5_week, i1.TURNOVER_LVL6_week, j1.TURNOVER_LVL7_week
 
 from  db_lshi.test2 e
-right join(
+left join(
             select ID_SKU,sum(QTY_SKU_DAY_WEEK*PRC_PAID_W_TAX) as TRUNOVER_ALL_F0
             from test2
             where Flag_active_offer=0
             group by ID_SKU
             ) s
 on e.ID_SKU=s.ID_SKU
-right join(
+left join(
             select ID_SKU, sum(QTY_SKU_DAY_WEEK*PRC_PAID_W_TAX) as TRUNOVER_ALL_WEEK_F0
             from test2
             where Flag_active_offer=0
             group by ID_SKU, DAY_OF_WEEK
             ) f
 on e.ID_SKU=f.ID_SKU
-right join(
+left join(
             select ID_SKU,sum(QTY_SKU_DAY_WEEK*PRC_PAID_W_TAX) as TRUNOVER_ALL_F1
             from test2
             where Flag_active_offer=1
             group by ID_SKU
             ) k
-on e.ID_SKU=s.ID_SKU
-right join(
+on e.ID_SKU=k.ID_SKU
+left join(
             select ID_SKU, sum(QTY_SKU_DAY_WEEK*PRC_PAID_W_TAX) as TRUNOVER_ALL_WEEK_F1
             from test2
             where Flag_active_offer=1
             group by ID_SKU, DAY_OF_WEEK
             ) l
-on e.ID_SKU=f.ID_SKU
-
-right join(
+on e.ID_SKU=l.ID_SKU
+left join(
             select ID_SKU, sum(QTY_SKU_DAY_WEEK*PRC_PAID_W_TAX) as TURNOVER_LVL4_all
             from test2
             where ID_NOMENCL_LVL4=4 and Flag_new_sku=1 and  Flag_active_offer=1
             group by ID_SKU
             ) g
 on e.ID_SKU=g.ID_SKU
-right join(
+left join(
             select ID_SKU, sum(QTY_SKU_DAY_WEEK*PRC_PAID_W_TAX) as TURNOVER_LVL5_all
             from test2
             where ID_NOMENCL_LVL5=5 and Flag_new_sku=1 and  Flag_active_offer=1
             group by ID_SKU
             ) h
 on e.ID_SKU=h.ID_SKU
-right join(
+left join(
             select ID_SKU, sum(QTY_SKU_DAY_WEEK*PRC_PAID_W_TAX) as TURNOVER_LVL6_all
             from test2
             where ID_NOMENCL_LVL6=6 and Flag_new_sku=1 and  Flag_active_offer=1
             group by ID_SKU
             ) i
 on e.ID_SKU=i.ID_SKU
-right join(
+left join(
             select ID_SKU, sum(QTY_SKU_DAY_WEEK*PRC_PAID_W_TAX) as TURNOVER_LVL7_all
             from test2
             where ID_NOMENCL_LVL7=7 and Flag_new_sku=1 and  Flag_active_offer=1
             group by ID_SKU
             ) j
 on e.ID_SKU=j.ID_SKU
-right join(
+left join(
             select ID_SKU, sum(QTY_SKU_DAY_WEEK*PRC_PAID_W_TAX) as TURNOVER_LVL4_week
             from test2
             where ID_NOMENCL_LVL4=4 and Flag_new_sku=1 and  Flag_active_offer=1
-            group by ID_SKU
+            group by ID_SKU,DAY_OF_WEEK
             ) g1
 on e.ID_SKU=g1.ID_SKU
-right join(
+left join(
             select ID_SKU, sum(QTY_SKU_DAY_WEEK*PRC_PAID_W_TAX) as TURNOVER_LVL5_week
             from test2
             where ID_NOMENCL_LVL5=5 and Flag_new_sku=1 and  Flag_active_offer=1
-            group by ID_SKU
+            group by ID_SKU,DAY_OF_WEEK
             ) h1
 on e.ID_SKU=h1.ID_SKU
-right join(
+left join(
             select ID_SKU, sum(QTY_SKU_DAY_WEEK*PRC_PAID_W_TAX) as TURNOVER_LVL6_week
             from test2
             where ID_NOMENCL_LVL6=6 and Flag_new_sku=1 and  Flag_active_offer=1
-            group by ID_SKU
+            group by ID_SKU,DAY_OF_WEEK
             ) i1
 on e.ID_SKU=i1.ID_SKU
-right join(
+left join(
             select ID_SKU, sum(QTY_SKU_DAY_WEEK*PRC_PAID_W_TAX) as TURNOVER_LVL7_week
             from test2
             where ID_NOMENCL_LVL7=7 and Flag_new_sku=1 and  Flag_active_offer=1
-            group by ID_SKU
+            group by ID_SKU,DAY_OF_WEEK
             ) j1
 on e.ID_SKU=j1.ID_SKU
 ;
