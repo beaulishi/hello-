@@ -1,0 +1,28 @@
+
+#######tableau de jeu######
+
+CREATE TABLE db_lshi.test2(ID_STORE STRING,
+ID_SKU STRING,
+ID_NOMENCL_LVL4 INT,
+ID_NOMENCL_LVL5 INT,
+ID_NOMENCL_LVL6 INT,
+ID_NOMENCL_LVL7 INT,
+LU_NOMENCL_LVL4 STRING,
+LU_NOMENCL_LVL5 STRING,
+LU_NOMENCL_LVL6 STRING,
+LU_NOMENCL_LVL7 STRING,
+DTS_PERIOD STRING,
+DTE_PERIOD STRING,
+Flag_active_offer INT,
+Flag_new_sku INT,
+PRC_PAID_W_TAX INT,
+PRC_SKU_OFFER INT,
+DAY_OF_WEEK INT,
+QTY_SKU_DAY_WEEK INT,
+Flag_non_working_day INT,
+DT_calculation STRING
+)
+row format delimited fields terminated by "\073"
+tblproperties ("skip.header.line.count"="1");
+
+LOAD DATA INPATH '/user/lshi/TEST2.csv' OVERWRITE INTO TABLE db_lshi.test2;
