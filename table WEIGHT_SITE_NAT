@@ -1,0 +1,11 @@
+
+
+##########################################################
+create table WEIGHT_SITE_NAT
+select a.ID_SKU,a.DT_DAY,b.Wright_LVL4_Define,b.Wright_LVL5_Define,b.Wright_LVL6_Define,b.Wright_LVL7_Define
+from (
+        select sum(Weight_DoW_Offer_LVL4_Mm12) as Wright_LVL4_Define, sum(Weight_DoW_Offer_LVL5_Mm12) as Wright_LVL5_Define,
+                    sum(Weight_DoW_Offer_LVL6_Mm12) as Wright_LVL6_Define,sum(Weight_DoW_Offer_LVL7_Mm12) as Wright_LVL7_Define
+                    from WEIGHT_DAY_NAT group by ID_SKU) b,
+      I_FORECAST_SITE a
+;
