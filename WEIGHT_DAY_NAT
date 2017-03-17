@@ -11,13 +11,13 @@ select *,
         case when TURNOVER_LVL5_week/TURNOVER_LVL5_all=0 then
             case when TURNOVER_LVL6_week/TURNOVER_LVL6_all=0 then 
                 case when TURNOVER_LVL7_week/TURNOVER_LVL7_all=0 then 0  
-                     else TURNOVER_LVL7_week/TURNOVER_LVL7_all end as Weight_DoW_Offer_LVL7
+                     else TURNOVER_LVL7_week/TURNOVER_LVL7_all end as Weight_DoW_Offer_LVL7_Mm12
             else TURNOVER_LVL6_week/TURNOVER_LVL6_all 
-            end as Weight_DoW_Offer_LVL6 
+            end as Weight_DoW_Offer_LVL6_Mm12 
          else TURNOVER_LVL5_week/TURNOVER_LVL5_all 
-         end as Weight_DoW_Offer_LVL5 
+         end as Weight_DoW_Offer_LVL5_Mm12 
     else TURNOVER_LVL4_week/TURNOVER_LVL4_all 
-    end as Weight_DoW_Offer_LVL4
+    end as Weight_DoW_Offer_LVL4_Mm12
         
     from WEIGHT_DAY_NAT_M
             ;
