@@ -2,8 +2,8 @@
 #ID_STORE, ID_SKU, Flag_active_offer, Flag_new_sku, Flag_non_working_day exsite deja dans la table I_FORECAST_SOURCE_WEIGHT
 #TRUNOVER_ALL_F0(chiffre d'affaire total par produit pendant la operation commercial) , TRUNOVER_ALL_WEEK_F0(chiffre d'affaire total par produit pendant la operation commercial par week),
 #TRUNOVER_ALL_F1(chiffre d'affaire total par produit hors la operation commercial), TRUNOVER_ALL_WEEK_F1(chiffre d'affaire total par produit hors la operation commercial),
-#TURNOVER_LVL4(chiffre d'affaire de la famile pour le noveau crug), TURNOVER_LVL5(chiffre d'affaire de la catégorie  pour le noveau crug), 
-#TURNOVER_LVL6(chiffre d'affaire de segment pour le noveau crug), TURNOVER_LVL7(chiffre d'affaire du march pour le noveau crug)
+#TURNOVER_LVL4(chiffre d'affaire de la famile pour le noveau crug pendant la operation commercial), TURNOVER_LVL5(chiffre d'affaire de la catégorie  pour le noveau crugpendant la operation commercial), 
+#TURNOVER_LVL6(chiffre d'affaire de segment pour le noveau crug pendant la operation commercial), TURNOVER_LVL7(chiffre d'affaire du march pour le noveau crug pendant la operation commercial)
 
 create table WEIGHT_DAY_NAT_M as
 select distinct e.ID_STORE, e.ID_SKU, e.Flag_active_offer, e.Flag_new_sku, e.Flag_non_working_day,
@@ -41,28 +41,28 @@ on e.ID_SKU=f.ID_SKU
 right join(
             select ID_SKU, sum(QTY_SKU_DAY_WEEK*PRC_PAID_W_TAX) as TURNOVER_LVL4
             from test2
-            where ID_NOMENCL_LVL4=4 and Flag_new_sku=1
+            where ID_NOMENCL_LVL4=4 and Flag_new_sku=1 and  Flag_active_offer=1
             group by ID_SKU
             ) g
 on e.ID_SKU=g.ID_SKU
 right join(
             select ID_SKU, sum(QTY_SKU_DAY_WEEK*PRC_PAID_W_TAX) as TURNOVER_LVL5
             from test2
-            where ID_NOMENCL_LVL5=5 and Flag_new_sku=1
+            where ID_NOMENCL_LVL5=5 and Flag_new_sku=1 and  Flag_active_offer=1
             group by ID_SKU
             ) h
 on e.ID_SKU=h.ID_SKU
 right join(
             select ID_SKU, sum(QTY_SKU_DAY_WEEK*PRC_PAID_W_TAX) as TURNOVER_LVL6
             from test2
-            where ID_NOMENCL_LVL6=6 and Flag_new_sku=1
+            where ID_NOMENCL_LVL6=6 and Flag_new_sku=1 and  Flag_active_offer=1
             group by ID_SKU
             ) i
 on e.ID_SKU=i.ID_SKU
 right join(
             select ID_SKU, sum(QTY_SKU_DAY_WEEK*PRC_PAID_W_TAX) as TURNOVER_LVL7
             from test2
-            where ID_NOMENCL_LVL7=7 and Flag_new_sku=1
+            where ID_NOMENCL_LVL7=7 and Flag_new_sku=1 and  Flag_active_offer=1
             group by ID_SKU
             ) j
 on e.ID_SKU=j.ID_SKU
