@@ -7,7 +7,8 @@ select *,
     else 0 end as Weight_DoW_Offer_SKU,
     case when Flag_active_offer=0 then TRUNOVER_ALL_WEEK_F0/TRUNOVER_ALL_F0
     else 0 end as Weight_DoW_Back_Shelf_SKU,
-    case when Flag_active_offer=1 and Flag_new_sku=1 then TURNOVER_LVL4/TRUNOVER_ALL
+    case when Flag_active_offer=1 and Flag_new_sku=1 then 
+        case when TURNOVER_LVL4_WEEK/TRUNOVER_ALL_
     else 0 end as Weight_DoW_Offer_LVL4_Mm12,
     case when Flag_active_offer=1 and Flag_new_sku=1 then TURNOVER_LVL5/TRUNOVER_ALL
     else 0 end as Weight_DoW_Offer_LVL5_Mm12,
