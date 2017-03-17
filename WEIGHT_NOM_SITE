@@ -1,4 +1,6 @@
 #############################################
+#cree la table Weight_NOM_SITE avec les variables de table I_FORECAST_SOURCE_WEIGHT_SITE
+
 create table  db_lshi.WEIGHT_NOM_SITE as
 	select a.ID_SKU, a.ID_STORE, a.DTS_PERIOD, test.DTE_PERIOD, a.ID_OFFER, 
 			a.OUT_OF_STOCK_RATE, a.TURNOVER_LVL4, a.TURNOVER_LVL5,	a.TURNOVER_LVL6, a.TURNOVER_LVL7,
@@ -23,4 +25,6 @@ from db_lshi.WEIGHT_NOM_SITE;
 
 
 #########################################################
+#pour creer une variable LOSS_SALES dans la table OUT_OF_STOCK_RATE qu'il exsite deja
+
 ALTER TABLE OUT_OF_STOCK_RATE ADD COLUMNS (LOSS_SALES int)
