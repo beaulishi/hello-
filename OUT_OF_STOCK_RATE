@@ -1,0 +1,4 @@
+#########################################################
+#pour creer une variable LOSS_SALES dans la table OUT_OF_STOCK_RATE qu'il exsite deja
+
+ALTER TABLE OUT_OF_STOCK_RATE ADD COLUMNS (LOSS_SALES int)
