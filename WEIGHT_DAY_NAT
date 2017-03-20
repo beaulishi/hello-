@@ -1,25 +1,18 @@
-
-##############################################
-
 create table WEIGHT_DAY_NAT as
 select *,
     case when Flag_active_offer=1 then TRUNOVER_ALL_WEEK_F1/TRUNOVER_ALL_F1
     else 0 end as Weight_DoW_Offer_SKU,
     case when Flag_active_offer=0 then TRUNOVER_ALL_WEEK_F0/TRUNOVER_ALL_F0
     else 0 end as Weight_DoW_Back_Shelf_SKU,
-    case when TURNOVER_LVL4_week/TURNOVER_LVL4_all=0 then
-        case when TURNOVER_LVL5_week/TURNOVER_LVL5_all=0 then
-            case when TURNOVER_LVL6_week/TURNOVER_LVL6_all=0 then 
-                case when TURNOVER_LVL7_week/TURNOVER_LVL7_all=0 then 0  
-                     else TURNOVER_LVL7_week/TURNOVER_LVL7_all end as Weight_DoW_Offer_LVL7_Mm12
-            else TURNOVER_LVL6_week/TURNOVER_LVL6_all 
-            end as Weight_DoW_Offer_LVL6_Mm12 
-         else TURNOVER_LVL5_week/TURNOVER_LVL5_all 
-         end as Weight_DoW_Offer_LVL5_Mm12 
-    else TURNOVER_LVL4_week/TURNOVER_LVL4_all 
-    end as Weight_DoW_Offer_LVL4_Mm12
+    case when TURNOVER_LVL4_week/TURNOVER_LVL4_all<>0 then TURNOVER_LVL4_week/TURNOVER_LVL4_all else
+       case when TURNOVER_LVL5_week/TURNOVER_LVL5_all<>0 then TURNOVER_LVL5_week/TURNOVER_LVL5_all else
+         case when TURNOVER_LVL6_week/TURNOVER_LVL6_all<>0 then TURNOVER_LVL6_week/TURNOVER_LVL6_all else
+            case when TURNOVER_LVL7_week/TURNOVER_LVL7_all<>0 then TURNOVER_LVL7_week/TURNOVER_LVL7_all else 0
+            end
+         end
+       end 
+    end as Weight_DoW_Offer_LVL_Mm12
         
     from WEIGHT_DAY_NAT_M
-            ;
-
+;
 
