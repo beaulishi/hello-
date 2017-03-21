@@ -11,7 +11,7 @@ select *,
             end
          end
        end 
-    end as Weight_DoW_Offer_LVL5
+    end as Weight_DoW_Offer_LVL
         
     from WEIGHT_DAY_NAT_M
 ;
