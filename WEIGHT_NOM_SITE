@@ -1,7 +1,7 @@
 #############################################
-#cree la table Weight_NOM_SITE avec les variables de table I_FORECAST_SOURCE_WEIGHT_SITE
+#cree la table V_Weight_NOM_SITE avec les variables de table I_FORECAST_SOURCE_WEIGHT_SITE
 
-create table  db_lshi.WEIGHT_NOM_SITE as
+create table  db_lshi.V_WEIGHT_NOM_SITE as
 	select a.ID_SKU, a.ID_STORE, a.DTS_PERIOD, a.DTE_PERIOD, a.ID_OFFER, 
 			 a.TURNOVER_LVL4, a.TURNOVER_LVL5, a.TURNOVER_LVL6, a.TURNOVER_LVL7,
 			a.TURNOVER_LVL4/b.TURNOVER_LVL4_all PERC_TURNOVER_LVL4_Mm12,  
