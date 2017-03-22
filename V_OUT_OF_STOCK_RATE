@@ -1,4 +1,18 @@
+CREATE TABLE db_lshi.OUT_OF_STOCK(ID_SKU STRING,
+ID_STORE STRING,
+ID_OFFER STRING,
+OUT_OF_STOCK_RATE STRING
+)
+row format delimited fields terminated by "\073"
+tblproperties ("skip.header.line.count"="1");
+
+
+
+
 #########################################################
 #pour creer une variable LOSS_SALES dans la table OUT_OF_STOCK_RATE qu'il exsite deja
+
+
+
 
 ALTER TABLE V_OUT_OF_STOCK ADD COLUMNS (LOSS_SALES int)
