@@ -1,4 +1,4 @@
-create table WEIGHT_DAY_NAT as
+create table V_WEIGHT_DAY_NAT as
 select *,
     case when Flag_active_offer=1 then TRUNOVER_ALL_WEEK_F1/TRUNOVER_ALL_F1
     else 0 end as Weight_DoW_Offer_SKU,
