@@ -1,4 +1,4 @@
-#table mediane poour table  WEIGHT_DAY_NAT
+#table mediane poour table  V_WEIGHT_DAY_NAT
 #ID_STORE, ID_SKU, Flag_active_offer, Flag_new_sku, Flag_non_working_day exsite deja dans la table I_FORECAST_SOURCE_WEIGHT
 #TRUNOVER_ALL_F0(chiffre d'affaire total par produit pendant la operation commercial) , TRUNOVER_ALL_WEEK_F0(chiffre d'affaire total par produit pendant la operation commercial par week),
 #TRUNOVER_ALL_F1(chiffre d'affaire total par produit hors la operation commercial), TRUNOVER_ALL_WEEK_F1(chiffre d'affaire total par produit hors la operation commercial),
@@ -8,7 +8,7 @@
 
 
 
-create table WEIGHT_DAY_NAT_M as
+create table V_WEIGHT_DAY_NAT_M as
 select distinct e.ID_STORE, e.ID_SKU, e.Flag_active_offer, e.Flag_new_sku, e.Flag_non_working_day,
 s.TRUNOVER_ALL_F0, f.TRUNOVER_ALL_WEEK_F0,k.TRUNOVER_ALL_F1, l.TRUNOVER_ALL_WEEK_F1, g.TURNOVER_LVL4_all, h.TURNOVER_LVL5_all, i.TURNOVER_LVL6_all, j.TURNOVER_LVL7_all,
 g1.TURNOVER_LVL4_week, h1.TURNOVER_LVL5_week, i1.TURNOVER_LVL6_week, j1.TURNOVER_LVL7_week
