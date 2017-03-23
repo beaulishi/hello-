@@ -1,21 +1,20 @@
 #############################################
 #cree la table V_Weight_NOM_SITE avec les variables de table I_FORECAST_SOURCE_WEIGHT_SITE
 
-create table  db_lshi.V_WEIGHT_NOM_SITE as
+
 	select  a.ID_SKU, a.ID_STORE, a.DTS_PERIOD, a.DTE_PERIOD, a.ID_OFFER,
 	        a.TURNOVER_LVL4,a.TURNOVER_LVL5,a.TURNOVER_LVL6,a.TURNOVER_LVL7,
-		a.DT_CALCULATION,
         case when c.ID_STORE_COUNT_LV4=11
-			then a.TURNOVER_LVL4/b.TURNOVER_LVL4_all
+			then b.TURNOVER_LVL4_ID_STORE/b1.TURNOVER_LVL4_all
 			else 0 end as PERC_TURNOVER_LVL4_Mm12,
 		case when d.ID_STORE_COUNT_LV5=11
-        	then a.TURNOVER_LVL5/b.TURNOVER_LVL5_all
+        	then b.TURNOVER_LVL5_ID_STORE/b1.TURNOVER_LVL5_all
         	else 0 end as PERC_TURNOVER_LVL5_Mm12,
         case when e.ID_STORE_COUNT_LV6=11
-        	then a.TURNOVER_LVL6/b.TURNOVER_LVL6_all
+        	then b.TURNOVER_LVL6_ID_STORE/b1.TURNOVER_LVL6_all
         	else 0 end as PERC_TURNOVER_LVL6_Mm12,
         case when f.ID_STORE_COUNT_LV7=11
-            then a.TURNOVER_LVL7/b.TURNOVER_LVL7_all
+            then b.TURNOVER_LVL7_ID_STORE/b1.TURNOVER_LVL7_all
             else 0 end as PERC_TURNOVER_LVL7_Mm12,
 case
 	when a.TURNOVER_LVL4<>0 then 4
@@ -27,10 +26,13 @@ case
                         end
                    end
     end as PERCENTILE_LVL_DEFINED
-from (select sum(TURNOVER_LVL4) as TURNOVER_LVL4_all, sum(TURNOVER_LVL5) as TURNOVER_LVL5_all,
-sum(TURNOVER_LVL6) as TURNOVER_LVL6_all, sum(TURNOVER_LVL7) as TURNOVER_LVL7_all,
+from (select sum(TURNOVER_LVL4) as TURNOVER_LVL4_ID_STORE, sum(TURNOVER_LVL5) as TURNOVER_LVL5_ID_STORE,
+sum(TURNOVER_LVL6) as TURNOVER_LVL6_ID_STORE, sum(TURNOVER_LVL7) as TURNOVER_LVL7_ID_STORE,
 ID_STORE
 from db_lshi.testukr group by ID_STORE) b,
+(select sum(TURNOVER_LVL4) as TURNOVER_LVL4_all, sum(TURNOVER_LVL5) as TURNOVER_LVL5_all,
+sum(TURNOVER_LVL6) as TURNOVER_LVL6_all, sum(TURNOVER_LVL7) as TURNOVER_LVL7_all
+from db_lshi.testukr) b1,
 db_lshi.testukr a,
  (select count(distinct(ID_STORE)) ID_STORE_COUNT_LV4
 from db_lshi.testukr
@@ -45,6 +47,5 @@ where TURNOVER_LVL6<>0) e,
 from db_lshi.testukr
 where TURNOVER_LVL7<>0) f
 where a.ID_STORE=b.ID_STORE
-;
 
--------------------------------------------------------------------------
+;
