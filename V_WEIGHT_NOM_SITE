@@ -4,6 +4,7 @@
 create table  db_lshi.V_WEIGHT_NOM_SITE as
 	select  a.ID_SKU, a.ID_STORE, a.DTS_PERIOD, a.DTE_PERIOD, a.ID_OFFER,
 	        a.TURNOVER_LVL4,a.TURNOVER_LVL5,a.TURNOVER_LVL6,a.TURNOVER_LVL7,
+		a.DT_CALCULATION,
         case when c.ID_STORE_COUNT_LV4=11
 			then a.TURNOVER_LVL4/b.TURNOVER_LVL4_all
 			else 0 end as PERC_TURNOVER_LVL4_Mm12,
