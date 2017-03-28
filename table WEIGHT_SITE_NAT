@@ -1,11 +1,54 @@
+-------------------------------------------------------------------------------------------------------------
+-------Weight_SITE_LVL_Define
+select b.*,
+sum(case
+     when c.CON_L4<>1
+     then a.PERC_TURNOVER_LVL4_Mm12
+     else case when c.CON_L5<>1
+          then a.PERC_TURNOVER_LVL5_Mm12
+          else case when c.CON_L5<>1
+               then a.PERC_TURNOVER_LVL6_Mm12
+               else case when c.CON_L6<>1
+                    then a.PERC_TURNOVER_LVL7_Mm12
+                    else 10
+                    end
+               end
+           end
+      end) as Weight_SITE_LVL_Define
+from db_lshi.test4 b, db_lshi.v_weight_nom_site a,
+(select count(distinct(PERC_TURNOVER_LVL4_Mm12)) CON_L4 ,
+count(distinct(PERC_TURNOVER_LVL5_Mm12)) CON_L5,
+count(distinct(PERC_TURNOVER_LVL6_Mm12)) CON_L6,
+count(distinct(PERC_TURNOVER_LVL7_Mm12)) CON_L7
+from  db_lshi.v_weight_nom_site) c
+where b.ID_SKU=a.ID_SKU
+group by b.DT_DAY,b.ID_SKU;
 
 
-##########################################################
-create table WEIGHT_SITE_NAT
-select a.ID_SKU,a.DT_DAY,b.Wright_LVL4_Define,b.Wright_LVL5_Define,b.Wright_LVL6_Define,b.Wright_LVL7_Define
-from (
-        select sum(Weight_DoW_Offer_LVL4_Mm12) as Wright_LVL4_Define, sum(Weight_DoW_Offer_LVL5_Mm12) as Wright_LVL5_Define,
-                    sum(Weight_DoW_Offer_LVL6_Mm12) as Wright_LVL6_Define,sum(Weight_DoW_Offer_LVL7_Mm12) as Wright_LVL7_Define
-                    from WEIGHT_DAY_NAT group by ID_SKU) b,
-      I_FORECAST_SITE a
-;
+------------Weight_SITE_LVL_Define_w_MA
+    select b.ID_SKU,
+    sum(case
+         when c.CON_L4<>1
+         then a.PERC_TURNOVER_LVL4_Mm12
+         else case when c.CON_L5<>1
+              then a.PERC_TURNOVER_LVL5_Mm12
+              else case when c.CON_L5<>1
+                   then a.PERC_TURNOVER_LVL6_Mm12
+                   else case when c.CON_L6<>1
+                        then a.PERC_TURNOVER_LVL7_Mm12
+                        else 10
+                        end
+                   end
+               end
+          end) as Weight_SITE_LVL_Define_w_MA
+    from db_lshi.test4 b, db_lshi.v_weight_nom_site a,
+    (select count(distinct(PERC_TURNOVER_LVL4_Mm12)) CON_L4 ,
+    count(distinct(PERC_TURNOVER_LVL5_Mm12)) CON_L5,
+    count(distinct(PERC_TURNOVER_LVL6_Mm12)) CON_L6,
+    count(distinct(PERC_TURNOVER_LVL7_Mm12)) CON_L7
+    from  db_lshi.v_weight_nom_site) c,
+    (select date_add(from_unixtime(unix_timestamp(DT_DAY,'dd/MM/yyyy'),'yyyy-MM-dd'),-3) INF_3,
+    date_add(from_unixtime(unix_timestamp(DT_DAY,'dd/MM/yyyy'),'yyyy-MM-dd'),3) SUP_3
+    from db_lshi.test4) d
+    where b.ID_SKU=a.ID_SKU and from_unixtime(unix_timestamp(b.DT_DAY,'dd/MM/yyyy'),'yyyy-MM-dd') between d.INF_3 and d.SUP_3
+    group by b.ID_SKU;
