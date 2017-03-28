@@ -16,3 +16,8 @@ tblproperties ("skip.header.line.count"="1");
 
 
 ALTER TABLE V_OUT_OF_STOCK ADD COLUMNS (LOSS_SALES int)
+
+
+
+
+
