@@ -1,18 +1,24 @@
 create table V_WEIGHT_DAY_NAT as
-select *,
-    case when Flag_active_offer=1 then TRUNOVER_ALL_WEEK_F1/TRUNOVER_ALL_F1
+select ID_SKU,DAY_OF_WEEK,
+    case when Flag_active_offer=1 then TURNOVER_FLG_ACT_OFF_WEEK/TURNOVER_FLG_ACT_OFF
     else 0 end as Weight_DoW_Offer_SKU,
-    case when Flag_active_offer=0 then TRUNOVER_ALL_WEEK_F0/TRUNOVER_ALL_F0
+    case when Flag_active_offer=0 then TURNOVER_NO_FLG_ACT_OFF_WEEK/TURNOVER_NO_FLG_ACT_OFF
     else 0 end as Weight_DoW_Back_Shelf_SKU,
-    case when TURNOVER_LVL4_week/TURNOVER_LVL4_all<>0 then TURNOVER_LVL4_week/TURNOVER_LVL4_all else
-       case when TURNOVER_LVL5_week/TURNOVER_LVL5_all<>0 then TURNOVER_LVL5_week/TURNOVER_LVL5_all else
-         case when TURNOVER_LVL6_week/TURNOVER_LVL6_all<>0 then TURNOVER_LVL6_week/TURNOVER_LVL6_all else
-            case when TURNOVER_LVL7_week/TURNOVER_LVL7_all<>0 then TURNOVER_LVL7_week/TURNOVER_LVL7_all else 0
+    case when TURNOVER_LVL4_FLG_ACT_OFF_NW_SKU_WEEK/TURNOVER_LVL4_FLG_ACT_OFF_NW_SKU<>0 then TURNOVER_LVL4_FLG_ACT_OFF_NW_SKU_WEEK/TURNOVER_LVL4_FLG_ACT_OFF_NW_SKU else
+       case when TURNOVER_LVL5_FLG_ACT_OFF_NW_SKU_WEEK/TURNOVER_LVL5_FLG_ACT_OFF_NW_SKU<>0 then TURNOVER_LVL5_FLG_ACT_OFF_NW_SKU_WEEK/TURNOVER_LVL5_FLG_ACT_OFF_NW_SKU else
+         case when TURNOVER_LVL6_FLG_ACT_OFF_NW_SKU_WEEK/TURNOVER_LVL6_FLG_ACT_OFF_NW_SKU<>0 then TURNOVER_LVL6_FLG_ACT_OFF_NW_SKU_WEEK/TURNOVER_LVL6_FLG_ACT_OFF_NW_SKU else
+            case when TURNOVER_LVL7_FLG_ACT_OFF_NW_SKU_WEEK/TURNOVER_LVL7_FLG_ACT_OFF_NW_SKU<>0 then TURNOVER_LVL7_FLG_ACT_OFF_NW_SKU_WEEK/TURNOVER_LVL7_FLG_ACT_OFF_NW_SKU else 0
             end
          end
-       end 
-    end as Weight_DoW_Offer_LVL
-        
-    from WEIGHT_DAY_NAT_M
+       end
+    end as Weight_DoW_Offer_LVL,
+        case when TURNOVER_LVL4_FLG_ACT_OFF_NW_SKU_WEEK/TURNOVER_LVL4_FLG_ACT_OFF_NW_SKU<>0 then 4 else
+           case when TURNOVER_LVL5_FLG_ACT_OFF_NW_SKU_WEEK/TURNOVER_LVL5_FLG_ACT_OFF_NW_SKU<>0 then 5 else
+             case when TURNOVER_LVL6_FLG_ACT_OFF_NW_SKU_WEEK/TURNOVER_LVL6_FLG_ACT_OFF_NW_SKU<>0 then 6 else
+                case when TURNOVER_LVL7_FLG_ACT_OFF_NW_SKU_WEEK/TURNOVER_LVL7_FLG_ACT_OFF_NW_SKU<>0 then 7 else 0
+                end
+             end
+           end
+        end as Weight_DoW_Offer_LVL_DEFIND
+    from V_WEIGHT_DAY_NAT_M
 ;
-
